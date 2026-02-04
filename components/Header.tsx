@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AssessmentMetadata, AssessmentType } from '../types';
 import { LOGO_URL, TAB_CONFIG } from '../constants';
@@ -15,12 +14,16 @@ const Header: React.FC<HeaderProps> = ({ metadata, onMetadataChange, activeTab, 
   const currentTab = TAB_CONFIG[activeTab];
 
   return (
-    <header className="flex flex-col items-center space-y-4">
-      <img src={LOGO_URL} alt="NW School Logo" className={`h-24 w-auto drop-shadow-md ${isPrintMode ? 'print:h-24' : ''}`} />
-      <div className="text-center space-y-1">
-        <h1 className={`font-bold text-slate-900 ${isPrintMode ? 'text-2xl' : 'text-2xl md:text-3xl'}`}>แบบบันทึกผลการประเมินคุณภาพผู้เรียน ด้านจิตศึกษา</h1>
-        <p className={`text-slate-600 font-medium ${isPrintMode ? 'text-xl' : 'text-xl'}`}>โรงเรียนหนองบัวแดงวิทยา จังหวัดชัยภูมิ</p>
-        <div className={`mt-4 py-2 px-6 bg-${currentTab.accent}-50 rounded-full text-${currentTab.accent}-700 font-semibold inline-block border border-${currentTab.accent}-100 transition-colors duration-300 ${isPrintMode ? 'bg-transparent border-none text-black mt-2 font-bold underline decoration-indigo-500 underline-offset-8' : ''}`}>
+    <header className={`flex flex-col items-center ${isPrintMode ? 'space-y-1 -mt-4' : 'space-y-4'}`}>
+      <img 
+        src={LOGO_URL} 
+        alt="NW School Logo" 
+        className={`w-auto drop-shadow-md transition-all ${isPrintMode ? 'h-16' : 'h-24'}`} 
+      />
+      <div className={`text-center ${isPrintMode ? 'space-y-0.5' : 'space-y-1'}`}>
+        <h1 className={`font-bold text-slate-900 ${isPrintMode ? 'text-lg' : 'text-2xl md:text-3xl'}`}>แบบบันทึกผลการประเมินคุณภาพผู้เรียน ด้านจิตศึกษา</h1>
+        <p className={`text-slate-600 font-medium ${isPrintMode ? 'text-base' : 'text-xl'}`}>โรงเรียนหนองบัวแดงวิทยา จังหวัดชัยภูมิ</p>
+        <div className={`mt-2 py-1 px-4 bg-${currentTab.accent}-50 rounded-full text-${currentTab.accent}-700 font-semibold inline-block border border-${currentTab.accent}-100 transition-colors duration-300 ${isPrintMode ? 'bg-transparent border-none text-black mt-1 text-sm font-bold underline decoration-slate-300 underline-offset-4' : ''}`}>
           {currentTab.subtitle}
         </div>
       </div>
@@ -83,13 +86,13 @@ const Header: React.FC<HeaderProps> = ({ metadata, onMetadataChange, activeTab, 
 
       {/* Static Info Display - Shown in print and preview mode */}
       {isPrintMode && (
-        <div className="w-full text-left mt-8 border-b-2 border-slate-800 pb-6 mb-4">
-          <div className="space-y-3">
-            <p className="text-base">
+        <div className="w-full text-left mt-2 border-b-2 border-slate-800 pb-2 mb-2">
+          <div className="space-y-1">
+            <p className="text-sm">
               <span className="font-bold">กิจกรรมที่:</span> {metadata.activityNumber || '........'} &nbsp;&nbsp;
               <span className="font-bold">เรื่อง:</span> {metadata.activityName || '................................................................................................'}
             </p>
-            <p className="text-base">
+            <p className="text-sm">
               <span className="font-bold">ครูผู้สอน:</span> {metadata.teacherName || '..................................................................'}
             </p>
           </div>
