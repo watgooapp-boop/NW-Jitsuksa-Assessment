@@ -91,7 +91,7 @@ const App: React.FC = () => {
 
   // Save logic - Only runs after successful initialization
   useEffect(() => {
-    if (!isInitialized) return;
+    if (!isInitialized || (window as any).TERMINATE_SAVE) return;
 
     localStorage.setItem('assessment_students', JSON.stringify(students));
     localStorage.setItem('assessment_metadata', JSON.stringify(metadata));
@@ -121,22 +121,22 @@ const App: React.FC = () => {
   };
 
   /**
-   * ฟังก์ชันเคลียร์ข้อมูลแบบ Nuclear Reset
-   * แก้ไขปัญหา Auto-save บันทึกข้อมูลกลับเร็วเกินไป โดยการ Disable ระบบเขียนข้อมูลชั่วคราว
+   * ฟังก์ชันเคลียร์ข้อมูลแบบ Nuclear Reset (แก้ไขใหม่เพื่อสยบ Auto-save)
    */
   const handleFullReset = () => {
     if (window.confirm('ยืนยันการเคลียร์ข้อมูล "ทั้งหมด" ในตาราง?\n(รายชื่อและคะแนนจะถูกลบทิ้งถาวรเพื่อเริ่มข้อมูลชุดใหม่)')) {
-      // 1. หยุดการทำงานของ localStorage ทันทีเพื่อป้องกัน Auto-save ในเสี้ยววินาทีสุดท้าย
+      // 1. ปิดสวิตช์การบันทึกทั้งในระดับ Logic และ Browser API ทันที
+      (window as any).TERMINATE_SAVE = true;
       try {
-        (window.localStorage as any).setItem = () => {};
-        (window.localStorage as any).removeItem = () => {};
+        // แอบเปลี่ยนฟังก์ชัน setItem ให้ไม่ทำงานเลย เพื่อกันเหนียว
+        window.localStorage.setItem = function() { return null; };
       } catch (e) {}
 
-      // 2. ใช้คำสั่งล้างข้อมูลจริงผ่าน Prototype ของระบบ
-      Storage.prototype.clear.call(window.localStorage);
+      // 2. ล้างข้อมูลจริง
+      window.localStorage.clear();
       
-      // 3. บังคับโหลดหน้าจอใหม่ทันที
-      window.location.replace(window.location.pathname);
+      // 3. รีโหลดหน้าจอเพื่อคืนค่าทุกอย่างเป็นค่าเริ่มต้น
+      window.location.replace(window.location.origin + window.location.pathname);
     }
   };
 
